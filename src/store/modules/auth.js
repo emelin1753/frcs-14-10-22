@@ -1,5 +1,6 @@
 import mutations from "../mutations";
-import { users } from "../backend";
+import { users, menu, tokens } from "../backend";
+import { getToken, validToken } from "@/helpers/global";
 
 const { TOKEN, MENU } = mutations;
 
@@ -8,7 +9,7 @@ const auth = {
 
   state: {
     token: null,
-    menu: null,
+    menu: [],
   },
 
   getters: {
@@ -31,6 +32,16 @@ const auth = {
       commit(TOKEN, null);
       if (users[data.login]?.password === data.password)
         commit(TOKEN, users[data.login].token);
+    },
+
+    getMenu({ commit }) {
+      commit(MENU, []);
+      if (!validToken()) return;
+      const result = [];
+      users[tokens[getToken()]].menu.forEach((el) => {
+        result.push(menu[el]);
+      });
+      commit(MENU, result);
     },
   },
 };
