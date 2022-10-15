@@ -30,7 +30,7 @@ const auth = {
     // авторизация пользователя и получение токена
     getLoginToken({ commit }, data) {
       commit(TOKEN, null);
-      if (users[data.login]?.password === data.password)
+      if (users[data.login] && users[data.login]?.password === data.password)
         commit(TOKEN, users[data.login].token);
     },
 
